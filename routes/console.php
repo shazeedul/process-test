@@ -9,4 +9,5 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote')->hourly();
 
 Schedule::command('process:log')
-    ->everyFiveSeconds();
+    ->everyFiveSeconds()
+    ->runInBackground();

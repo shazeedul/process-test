@@ -14,7 +14,7 @@ class ProcessLogger extends Command
      *
      * @var string
      */
-    protected $signature = 'process:log {processId?}';
+    protected $signature = 'process:log';
 
     /**
      * The console command description.
@@ -28,9 +28,15 @@ class ProcessLogger extends Command
      */
     public function handle()
     {
-        $processId = $this->argument('processId');
-        if ($processId) {
-            Log::info("Log generated for process: $processId");
+        $processes = Process::where('status', 'running')->get();
+        foreach ($processes as $process) {
+            $this->logProcess($process);
         }
+    }
+
+    private function logProcess($process)
+    {
+        $processName = $process->pid;
+        Log::info("Log generated for process: $processName");
     }
 }
