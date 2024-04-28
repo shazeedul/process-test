@@ -16,7 +16,7 @@ class ProcessController extends Controller
     public function store(Request $request)
     {
         $process = new Process();
-        $process->name = $request->input('name');
+        $process->pid = $request->input('pid');
         $process->save();
 
         // Start generating logs for the new process
@@ -44,7 +44,7 @@ class ProcessController extends Controller
     // Custom method to start generating logs for a process
     private function startGeneratingLogs(Process $process)
     {
-        $processName = $process->name;
+        $processName = $process->pid;
         $logInterval = 5; // seconds
 
         // Using Laravel's task scheduling to generate logs
