@@ -51,10 +51,78 @@ php artisan key:generate
 ```
 
 -    Then request those api request by postman or thunder client or etc.
--    base-url/api/get-all
--    base-url/api/get-single/{pid}
--    base-url/api/create-process
--    base-url/api/delete-process/{pid}
+-    base-url/api/get-all | method:get
+  ```
+[
+  {
+    "PID": 847056,
+    "Creation time": "04:24 PM 29.04.2024"
+  },
+  {
+    "PID": 721651,
+    "Creation time": "04:24 PM 29.04.2024"
+  },
+  {
+    "PID": 815629,
+    "Creation time": "04:24 PM 29.04.2024"
+  },
+  {
+    "PID": 187441,
+    "Creation time": "04:24 PM 29.04.2024"
+  }
+]
+```
+-    base-url/api/get-single/{pid} | method:get
+  ```   
+{
+  "logs": [
+    [
+      "04:56 PM 29.04.2024"
+    ],
+    [
+      "04:56 PM 29.04.2024"
+    ],
+    [
+      "04:56 PM 29.04.2024"
+    ],
+    [
+      "04:56 PM 29.04.2024"
+    ],
+    [
+      "04:56 PM 29.04.2024"
+    ],
+    [
+      "04:56 PM 29.04.2024"
+    ],
+    [
+      "04:56 PM 29.04.2024"
+    ],
+    [
+      "04:56 PM 29.04.2024"
+    ],
+    [
+      "04:56 PM 29.04.2024"
+    ]
+  ]
+}
+```
+-    base-url/api/create-process | method:post
+  ```   
+[
+  [
+    {
+      "PID": 268344,
+      "Creation time": "04:44 PM 29.04.2024"
+    }
+  ]
+]   
+```
+-    base-url/api/delete-process/{pid} | method:delete
+  ```   
+{
+  "message": "\"741219\"The Process has been successfully deleted"
+}
+```
 
 ## Security Vulnerabilities
 
