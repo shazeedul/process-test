@@ -1,5 +1,6 @@
 <?php
 
+use App\Logging\CustomizeFormatter;
 use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogUdpHandler;
@@ -129,6 +130,7 @@ return [
 
         'process' => [
             'driver' => 'single',
+            'handler' => CustomizeFormatter::class,
             'path' => storage_path('logs/process.log'),
             'level' => 'info',
         ],

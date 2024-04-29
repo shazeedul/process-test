@@ -2,62 +2,61 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Process;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class ProcessController extends Controller
 {
     public function index()
     {
-        return Process::all();
+        $processes = Process::all();
+
+        $formattedProcesses = [];
+        foreach ($processes as $process) {
+            $formattedProcesses[] = [
+                'PID' => $process->pid,
+                'Creation time' => Carbon::parse($process->created_at)->format('h:i A d.m.Y'),
+            ];
+        }
+        return response()->json($formattedProcesses, 200);
     }
 
-    public function store(Request $request)
+    public function store()
     {
         $process = new Process();
-        $process->pid = $request->input('pid');
+        $process->pid = rand(100000, 999999);
+        $process->status = 'running';
         $process->save();
 
-        // Start generating logs for the new process
-        $this->startGeneratingLogs($process);
+        $formattedProcesses[] = [
+            'PID' => $process->pid,
+            'Creation time' => Carbon::parse($process->created_at)->format('h:i A d.m.Y'),
+        ];
 
-        return $process;
+        return response()->json([$formattedProcesses], 201);
     }
 
     public function show($id)
     {
-        return Process::findOrFail($id);
+        $process = Process::with('logs')->where('pid', $id)->first();
+
+        $logs = $process->logs;
+
+        $formattedLogs = [];
+        foreach ($logs as $log) {
+            $formattedLogs[] = [
+                $log->creation_time
+            ];
+        }
+
+        return response()->json(['logs' => $formattedLogs], 200);
     }
 
     public function destroy($id)
     {
-        $process = Process::findOrFail($id);
+        $process = Process::where('pid', $id)->first();
         $process->delete();
 
-        // Stop generating logs for the deleted process
-        $this->stopGeneratingLogs($process);
-
-        return response()->json(['message' => 'Process deleted successfully']);
-    }
-
-    // Custom method to start generating logs for a process
-    private function startGeneratingLogs(Process $process)
-    {
-        $processName = $process->pid;
-        $logInterval = 5; // seconds
-
-        // Using Laravel's task scheduling to generate logs
-        $schedule = app()->make(\Illuminate\Console\Scheduling\Schedule::class);
-        $schedule->call(function () use ($processName) {
-            Log::info("Log generated for process: $processName");
-        })->everyFiveSeconds()->name("process_log_$processName")->withoutOverlapping()->runInBackground();
-    }
-
-    // Custom method to stop generating logs for a process
-    private function stopGeneratingLogs(Process $process)
-    {
-        $processName = $process->name;
-        \Illuminate\Console\Scheduling\Schedule::delete("process_log_$processName");
+        return response()->json(['message' => '"' . $process->pid . '" ' . 'The Process has been successfully deleted'], 200);
     }
 }

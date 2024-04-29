@@ -37,7 +37,8 @@ class ProcessLogger extends Command
 
     private function logProcess($process)
     {
-        $processName = $process->pid;
-        Log::channel('process')->info("Time: " . now()->toDateTimeString() . ", PID: " . $processName);
+        $process->logs()->create([
+            'creation_time' => now(),
+        ]);
     }
 }

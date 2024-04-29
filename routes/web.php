@@ -39,4 +39,4 @@ Route::get('/', function (Logger $logger) {
     }
 });
 
-Route::resource('processes', ProcessController::class);
+
