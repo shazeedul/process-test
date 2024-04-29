@@ -28,15 +28,16 @@ class ProcessLogger extends Command
      */
     public function handle()
     {
-        $processes = Process::where('status', 'running')->get();
-        foreach ($processes as $process) {
-            $this->logProcess($process);
-        }
+        Process::where('status', 'running')->chunk(500, function ($processes) {
+            foreach ($processes as $process) {
+                $this->logProcess($process);
+            }
+        });
     }
 
     private function logProcess($process)
     {
         $processName = $process->pid;
-        Log::info("Log generated for process: $processName");
+        Log::channel('process')->info("Time: " . now()->toDateTimeString() . ", PID: " . $processName);
     }
 }
