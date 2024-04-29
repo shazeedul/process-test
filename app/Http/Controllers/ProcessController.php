@@ -36,9 +36,9 @@ class ProcessController extends Controller
         return response()->json([$formattedProcesses], 201);
     }
 
-    public function show($id)
+    public function show($pid)
     {
-        $process = Process::with('logs')->where('pid', $id)->first();
+        $process = Process::with('logs')->where('pid', $pid)->first();
 
         $logs = $process->logs;
 
@@ -52,9 +52,9 @@ class ProcessController extends Controller
         return response()->json(['logs' => $formattedLogs], 200);
     }
 
-    public function destroy($id)
+    public function destroy($pid)
     {
-        $process = Process::where('pid', $id)->first();
+        $process = Process::where('pid', $pid)->first();
         $process->delete();
 
         return response()->json(['message' => '"' . $process->pid . '" ' . 'The Process has been successfully deleted'], 200);
